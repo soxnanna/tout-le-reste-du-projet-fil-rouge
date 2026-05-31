@@ -1,0 +1,18 @@
+# Portfolio Full Stack - Projet Fil Rouge
+
+## Description
+Application web full stack avec intégration CI/CD Jenkins + SonarQube.
+
+## Stack technique
+- Frontend : React.js
+- Backend : Node.js
+- Base de données : MongoDB
+- CI/CD : Jenkins
+- Qualité du code : SonarQube
+
+## Pipeline CI/CD
+1. Analyse SonarQube
+2. Quality Gate
+3. Build Backend Docker
+4. Build Frontend Docker
+5. Déploiement des conteneurs
