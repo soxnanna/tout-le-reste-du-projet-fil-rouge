@@ -21,3 +21,4 @@ Application web full stack avec intégration CI/CD Jenkins + SonarQube.
 trigger build
 trigger
 trigger2
+trigger kubeconfig fixed
