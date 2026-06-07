@@ -22,3 +22,4 @@ trigger build
 trigger
 trigger2
 trigger sonar new
+trigger webhook
