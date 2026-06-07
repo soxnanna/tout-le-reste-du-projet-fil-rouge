@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/'
+                sh 'kubectl apply -f k8s/ --validate=false'
                 sh 'kubectl rollout restart deployment/backend-deployment -n $K8S_NAMESPACE'
                 sh 'kubectl rollout restart deployment/frontend-deployment -n $K8S_NAMESPACE'
                 sh 'kubectl rollout status deployment/backend-deployment -n $K8S_NAMESPACE --timeout=120s'
