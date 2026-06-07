@@ -67,8 +67,8 @@ pipeline {
                 sh 'kubectl apply -f k8s/ --validate=false'
                 sh 'kubectl rollout restart deployment/backend-deployment -n $K8S_NAMESPACE'
                 sh 'kubectl rollout restart deployment/frontend-deployment -n $K8S_NAMESPACE'
-                sh 'kubectl rollout status deployment/backend-deployment -n $K8S_NAMESPACE --timeout=120s'
-                sh 'kubectl rollout status deployment/frontend-deployment -n $K8S_NAMESPACE --timeout=120s'
+                sh 'kubectl rollout status deployment/backend-deployment -n $K8S_NAMESPACE --timeout=300s'
+                sh 'kubectl rollout status deployment/frontend-deployment -n $K8S_NAMESPACE --timeout=300s'
             }
         }
         stage('Verify Deployment') {
