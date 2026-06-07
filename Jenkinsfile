@@ -4,8 +4,10 @@ pipeline {
         nodejs 'nodejs'
     }
     environment {
-        BACKEND_IMAGE  = "portfolio-backend"
-        FRONTEND_IMAGE = "portfolio-frontend"
+        DOCKER_HUB_USER = "soxnanna"
+        BACKEND_IMAGE   = "${DOCKER_HUB_USER}/portfolio-backend"
+        FRONTEND_IMAGE  = "${DOCKER_HUB_USER}/portfolio-frontend"
+        K8S_NAMESPACE   = "portfolio"
     }
     stages {
         stage('Clone Repository') {
@@ -35,31 +37,44 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('backend') {
-                    sh 'docker build --no-cache -t $BACKEND_IMAGE .'
+                    sh 'docker build --no-cache -t $BACKEND_IMAGE:latest .'
                 }
             }
         }
         stage('Build Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'docker build --no-cache -t $FRONTEND_IMAGE .'
+                    sh 'docker build --no-cache -t $FRONTEND_IMAGE:latest .'
                 }
             }
         }
-        stage('Start Containers') {
+        stage('Push to Docker Hub') {
             steps {
-                withCredentials([file(credentialsId: 'portfolio-env', variable: 'ENV_FILE')]) {
-                    sh 'docker rm -f portfolio-mongo portfolio-api portfolio-web || true'
-                    sh 'docker compose down --remove-orphans'
-                    sh 'cp $ENV_FILE .env'
-                    sh 'docker compose --env-file .env up -d'
-                    sh 'rm -f .env'
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub_creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh 'docker push $BACKEND_IMAGE:latest'
+                    sh 'docker push $FRONTEND_IMAGE:latest'
+                    sh 'docker logout'
                 }
             }
         }
-        stage('Verify Containers') {
+        stage('Deploy to Kubernetes') {
             steps {
-                sh 'docker ps'
+                sh 'kubectl apply -f k8s/'
+                sh 'kubectl rollout restart deployment/backend-deployment -n $K8S_NAMESPACE'
+                sh 'kubectl rollout restart deployment/frontend-deployment -n $K8S_NAMESPACE'
+                sh 'kubectl rollout status deployment/backend-deployment -n $K8S_NAMESPACE --timeout=120s'
+                sh 'kubectl rollout status deployment/frontend-deployment -n $K8S_NAMESPACE --timeout=120s'
+            }
+        }
+        stage('Verify Deployment') {
+            steps {
+                sh 'kubectl get pods -n $K8S_NAMESPACE'
+                sh 'kubectl get services -n $K8S_NAMESPACE'
             }
         }
     }
@@ -72,8 +87,9 @@ pipeline {
                     <p><b>Job :</b> ${env.JOB_NAME}</p>
                     <p><b>Build :</b> #${env.BUILD_NUMBER}</p>
                     <p><b>Durée :</b> ${currentBuild.durationString}</p>
-                    <p>SonarQube Quality Gate : Passed</p>
-                    <p>Backend + Frontend déployés avec succès.</p>
+                    <p>SonarQube Quality Gate : Passed ?</p>
+                    <p>Images poussées sur Docker Hub ?</p>
+                    <p>Déployé sur Kubernetes ?</p>
                     <p><a href="${env.BUILD_URL}">Voir les logs Jenkins</a></p>
                 """,
                 to: "soxnanna@gmail.com",
