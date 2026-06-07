@@ -18,3 +18,4 @@ Application web full stack avec intégration CI/CD Jenkins + SonarQube.
 5. Déploiement des conteneurs
 # Test 2 dim. 31 mai 2026 16:42:54 CEST
 # Test dim. 31 mai 2026 16:49:10 CEST
+trigger build
