@@ -28,3 +28,4 @@ deploy test
 trigger kubeconfig fixed
 trigger new portfolio
 trigger portfolio-gate
+trigger quality gate 200
