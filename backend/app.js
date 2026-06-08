@@ -1,7 +1,7 @@
-/* =============================================
+/* ==============================================
    app.js — Point d'entrée de l'API Portfolio
-   Express.js + MongoDB (Mongoose)
-   ============================================= */
+   Express.js + MongoDB Atlas
+   ============================================== */
 
 require('dotenv').config();
 
@@ -9,86 +9,65 @@ const express      = require('express');
 const cors         = require('cors');
 const connectDB    = require('./config/connectdb');
 const projetRoutes = require('./routes/projetRoutes');
+const authRoutes   = require('./routes/authRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+const certificationRoutes = require('./routes/certificationRoutes');
 
-/* ── Connexion à MongoDB ── */
+/* ── Connexion MongoDB Atlas ── */
 connectDB();
 
-/* ── Initialisation d'Express ── */
 const app = express();
 
-/* ════════════════════════════════════════════
-   MIDDLEWARES GLOBAUX
-   ════════════════════════════════════════════ */
-
+/* ── Middlewares ── */
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+}));
 
-/* CORS — origines autorisées (dev local + Docker) */
-app.use(
-  cors({
-    origin: [
-      'http://localhost:3000', // react-scripts dev
-      'http://localhost:5173', // vite dev
-      'http://localhost',      // Docker production (port 80)
-    ],
-    methods      : ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
-
-/* ════════════════════════════════════════════
-   ROUTES
-   ════════════════════════════════════════════ */
-
+/* ── Route santé ── */
 app.get('/', (req, res) => {
   res.json({
-    success: true,
-    message: '🚀 API Portfolio — Express.js + MongoDB',
-    version: '1.0.0',
-    endpoints: {
-      'GET    /projets'    : 'Lister tous les projets',
-      'POST   /projets'    : 'Ajouter un projet',
-      'GET    /projets/:id': 'Obtenir un projet par ID',
-      'PUT    /projets/:id': 'Modifier un projet',
-      'DELETE /projets/:id': 'Supprimer un projet',
+    message : '🚀 API Portfolio opérationnelle',
+    version : '1.0.0',
+    routes  : {
+      'GET    /projets'     : 'Tous les projets',
+      'POST   /projets'     : 'Ajouter un projet (Protégé)',
+      'GET    /projets/:id' : 'Un projet par ID',
+      'PUT    /projets/:id' : 'Modifier un projet (Protégé)',
+      'DELETE /projets/:id' : 'Supprimer un projet (Protégé)',
+      'POST   /auth/login'  : 'Se connecter',
     },
   });
 });
 
+/* ── Routes ── */
+app.use('/auth',    authRoutes);
+app.use('/messages', messageRoutes);
 app.use('/projets', projetRoutes);
+app.use('/certifications', certificationRoutes);
 
-/* ════════════════════════════════════════════
-   GESTION DES ERREURS
-   ════════════════════════════════════════════ */
-
+/* ── 404 ── */
 app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route non trouvée : ${req.method} ${req.originalUrl}`,
-  });
+  res.status(404).json({ success: false, message: `Route introuvable : ${req.method} ${req.originalUrl}` });
 });
 
+/* ── Erreurs globales ── */
 app.use((err, req, res, next) => {
-  console.error('💥 Erreur non gérée :', err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Erreur serveur interne.',
-  });
+  console.error('💥', err.stack);
+  res.status(500).json({ success: false, message: err.message || 'Erreur serveur.' });
 });
 
-/* ════════════════════════════════════════════
-   DÉMARRAGE DU SERVEUR
-   ════════════════════════════════════════════ */
-
-const PORT = process.env.PORT || 3001;
-
+/* ── Démarrage ── */
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log('');
   console.log('╔══════════════════════════════════════════╗');
-  console.log('║   🚀  API PORTFOLIO — DÉMARRÉE           ║');
+  console.log('║   🚀  API PORTFOLIO DÉMARRÉE             ║');
   console.log('╠══════════════════════════════════════════╣');
-  console.log(`║   Port    : http://localhost:${PORT}          ║`);
-  console.log(`║   Env     : ${process.env.NODE_ENV || 'development'}                   ║`);
+  console.log(`║   ➜  http://localhost:${PORT}                ║`);
   console.log('╚══════════════════════════════════════════╝');
   console.log('');
 });
