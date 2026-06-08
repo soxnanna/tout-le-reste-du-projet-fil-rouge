@@ -26,3 +26,4 @@ trigger webhook
 trigger k8s kubeconfig
 deploy test
 trigger kubeconfig fixed
+trigger new portfolio
