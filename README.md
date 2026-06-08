@@ -24,3 +24,4 @@ trigger2
 trigger sonar new
 trigger webhook
 trigger k8s kubeconfig
+deploy test
