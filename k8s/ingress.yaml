@@ -11,20 +11,13 @@ spec:
     - host: portfolio.soxnanna.local
       http:
         paths:
-          - path: /projets(/|$)(.*)
+          - path: /api(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: backend-service
                 port:
-                  number: 3001
-          - path: /api-health(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: backend-service
-                port:
-                  number: 3001
+                  number: 5000
           - path: /()(.*)
             pathType: ImplementationSpecific
             backend:

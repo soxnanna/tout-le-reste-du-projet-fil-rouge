@@ -1,21 +1,50 @@
+/* ==============================================
+   models/projetModel.js — Schéma Mongoose
+   ============================================== */
+
 const mongoose = require('mongoose');
 
 const ProjetSchema = new mongoose.Schema(
   {
     libelle: {
-      type: String,
-      required: [true, 'Le libellé est obligatoire'],
-      trim: true,
+      type     : String,
+      required : [true, 'Le libellé est obligatoire'],
+      trim     : true,
+      maxlength: [100, 'Maximum 100 caractères'],
     },
-    sourceImage: { type: String, default: '' },
+    image: {
+      type   : String,
+      default: '',
+      trim   : true,
+    },
     description: {
-      type: String,
-      required: [true, 'La description est obligatoire'],
+      type     : String,
+      required : [true, 'La description est obligatoire'],
+      trim     : true,
+      maxlength: [2000, 'Maximum 2000 caractères'],
     },
-    technologie: { type: String, default: 'Non précisé' },
-    dateCreation: {
-      type: String,
-      default: () => new Date().toISOString().split('T')[0],
+    technologie: {
+      type   : String,
+      default: 'Non précisé',
+      trim   : true,
+    },
+    dateDebut: {
+      type   : String,
+      default: '',
+    },
+    dateFin: {
+      type   : String,
+      default: '',
+    },
+    categorie: {
+      type   : String,
+      enum   : ['ODC', 'ISI', 'AUTRE'],
+      default: 'ODC',
+    },
+    statut: {
+      type   : String,
+      enum   : ['En cours', 'Terminé'],
+      default: 'En cours',
     },
   },
   {
@@ -33,5 +62,3 @@ const ProjetSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Projet', ProjetSchema);
-
-

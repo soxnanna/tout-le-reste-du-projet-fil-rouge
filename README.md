@@ -24,4 +24,8 @@ trigger2
 trigger sonar new
 trigger webhook
 trigger k8s kubeconfig
+deploy test
 trigger kubeconfig fixed
+trigger new portfolio
+trigger portfolio-gate
+trigger quality gate 200
