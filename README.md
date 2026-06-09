@@ -29,3 +29,4 @@ trigger kubeconfig fixed
 trigger new portfolio
 trigger portfolio-gate
 trigger quality gate 200
+deploy nouveau portfolio Anna Keita
