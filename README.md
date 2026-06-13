@@ -45,3 +45,4 @@ restart services
 fix home permissions
 fix DNS
 terraform imports done
+fix: backend liveness/readiness probes path corrected to /

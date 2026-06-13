@@ -69,7 +69,7 @@ resource "kubernetes_deployment" "backend" {
           }
           liveness_probe {
             http_get {
-              path = "/api/projets"
+              path = "/"
               port = 5000
             }
             initial_delay_seconds = 30
@@ -78,7 +78,7 @@ resource "kubernetes_deployment" "backend" {
           }
           readiness_probe {
             http_get {
-              path = "/api/projets"
+              path = "/"
               port = 5000
             }
             initial_delay_seconds = 15
