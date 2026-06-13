@@ -40,3 +40,4 @@ fix terraform syntax
 fix kubeconfig jenkins
 fix minikube permissions
 fix minikube permissions
+fix minikube-permissions
