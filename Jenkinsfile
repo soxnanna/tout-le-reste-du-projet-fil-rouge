@@ -65,6 +65,8 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
+                sh 'kubectl apply -f k8s/namespace.yaml'
+                sh 'sleep 3'
                 sh 'kubectl apply -f k8s/ --validate=false'
                 sh 'kubectl rollout restart deployment/backend-deployment -n $K8S_NAMESPACE'
                 sh 'kubectl rollout restart deployment/frontend-deployment -n $K8S_NAMESPACE'
