@@ -32,3 +32,4 @@ trigger quality gate 200
 deploy nouveau portfolio Anna Keita
 fix sonarqube ip
 trigger sonarqube 192.168.157.129
+trigger sonarqube 192.168.10.1
