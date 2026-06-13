@@ -38,3 +38,4 @@ trigger minikube ready
 fix terraform deployments
 fix terraform syntax
 fix kubeconfig jenkins
+fix minikube permissions
