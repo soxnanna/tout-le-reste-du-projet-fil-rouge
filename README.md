@@ -42,3 +42,4 @@ fix minikube permissions
 fix minikube permissions
 fix minikube-permissions
 restart services
+fix home permissions
