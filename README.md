@@ -36,3 +36,4 @@ trigger sonarqube 192.168.10.1
 fix sonarqube network
 trigger minikube ready
 fix terraform deployments
+fix terraform syntax

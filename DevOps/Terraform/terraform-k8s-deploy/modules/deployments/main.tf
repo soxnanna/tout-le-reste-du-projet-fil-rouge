@@ -29,32 +29,58 @@ resource "kubernetes_deployment" "backend" {
           port { container_port = 5000 }
           env {
             name = "NODE_ENV"
-            value_from { config_map_key_ref { name = var.configmap_name; key = "NODE_ENV" } }
+            value_from {
+              config_map_key_ref {
+                name = var.configmap_name
+                key  = "NODE_ENV"
+              }
+            }
           }
           env {
             name = "PORT"
-            value_from { config_map_key_ref { name = var.configmap_name; key = "PORT" } }
+            value_from {
+              config_map_key_ref {
+                name = var.configmap_name
+                key  = "PORT"
+              }
+            }
           }
           env {
             name = "MONGO_URI"
-            value_from { config_map_key_ref { name = var.configmap_name; key = "MONGO_URI" } }
+            value_from {
+              config_map_key_ref {
+                name = var.configmap_name
+                key  = "MONGO_URI"
+              }
+            }
           }
           env {
             name = "CORS_ORIGIN"
-            value_from { config_map_key_ref { name = var.configmap_name; key = "CORS_ORIGIN" } }
+            value_from {
+              config_map_key_ref {
+                name = var.configmap_name
+                key  = "CORS_ORIGIN"
+              }
+            }
           }
           resources {
             requests = { cpu = "100m", memory = "128Mi" }
             limits   = { cpu = "300m", memory = "256Mi" }
           }
           liveness_probe {
-            http_get { path = "/api/projets"; port = 5000 }
+            http_get {
+              path = "/api/projets"
+              port = 5000
+            }
             initial_delay_seconds = 30
             period_seconds        = 15
             failure_threshold     = 3
           }
           readiness_probe {
-            http_get { path = "/api/projets"; port = 5000 }
+            http_get {
+              path = "/api/projets"
+              port = 5000
+            }
             initial_delay_seconds = 15
             period_seconds        = 10
             failure_threshold     = 3
@@ -66,11 +92,17 @@ resource "kubernetes_deployment" "backend" {
 }
 
 resource "kubernetes_service" "backend" {
-  metadata { name = "backend-service"; namespace = var.namespace }
+  metadata {
+    name      = "backend-service"
+    namespace = var.namespace
+  }
   spec {
     selector = { app = "backend" }
     type     = "NodePort"
-    port { port = 5000; target_port = 5000 }
+    port {
+      port        = 5000
+      target_port = 5000
+    }
   }
 }
 
@@ -95,13 +127,19 @@ resource "kubernetes_deployment" "frontend" {
             limits   = { cpu = "200m", memory = "128Mi" }
           }
           liveness_probe {
-            http_get { path = "/"; port = 80 }
+            http_get {
+              path = "/"
+              port = 80
+            }
             initial_delay_seconds = 10
             period_seconds        = 15
             failure_threshold     = 3
           }
           readiness_probe {
-            http_get { path = "/"; port = 80 }
+            http_get {
+              path = "/"
+              port = 80
+            }
             initial_delay_seconds = 5
             period_seconds        = 10
             failure_threshold     = 3
@@ -113,11 +151,17 @@ resource "kubernetes_deployment" "frontend" {
 }
 
 resource "kubernetes_service" "frontend" {
-  metadata { name = "frontend-service"; namespace = var.namespace }
+  metadata {
+    name      = "frontend-service"
+    namespace = var.namespace
+  }
   spec {
     selector = { app = "frontend" }
     type     = "NodePort"
-    port { port = 80; target_port = 80 }
+    port {
+      port        = 80
+      target_port = 80
+    }
   }
 }
 
