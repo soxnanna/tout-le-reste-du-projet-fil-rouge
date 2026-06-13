@@ -44,3 +44,4 @@ fix minikube-permissions
 restart services
 fix home permissions
 fix DNS
+terraform imports done
