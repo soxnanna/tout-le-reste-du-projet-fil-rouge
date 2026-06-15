@@ -47,3 +47,4 @@ fix DNS
 terraform imports done
 fix: backend liveness/readiness probes path corrected to /
 test
+restart services ok
