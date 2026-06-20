@@ -51,3 +51,4 @@ restart services ok
 trigger pipeline sonarqube ip fix
 retry pipeline after dns fix
 retry pipeline - minikube fixed + restart policies applied
+retry - jenkins kubeconfig fixed
