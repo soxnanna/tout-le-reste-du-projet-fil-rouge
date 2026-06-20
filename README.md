@@ -29,3 +29,22 @@ trigger kubeconfig fixed
 trigger new portfolio
 trigger portfolio-gate
 trigger quality gate 200
+deploy nouveau portfolio Anna Keita
+fix sonarqube ip
+trigger sonarqube 192.168.157.129
+trigger sonarqube 192.168.10.1
+fix sonarqube network
+trigger minikube ready
+fix terraform deployments
+fix terraform syntax
+fix kubeconfig jenkins
+fix minikube permissions
+fix minikube permissions
+fix minikube-permissions
+restart services
+fix home permissions
+fix DNS
+terraform imports done
+fix: backend liveness/readiness probes path corrected to /
+test
+restart services ok
