@@ -49,3 +49,4 @@ fix: backend liveness/readiness probes path corrected to /
 test
 restart services ok
 trigger pipeline sonarqube ip fix
+retry pipeline after dns fix
