@@ -96,9 +96,12 @@ pipeline {
             steps {
                 sh '''
                     echo "Verification du monitoring post-deploiement..."
-                    RESULT=$(curl -s "http://172.17.0.1:9090/api/v1/query?query=probe_success" || echo "FAIL")
+                    RESULT=$(curl -s -G "http://172.17.0.1:9090/api/v1/query" --data-urlencode "query=probe_success" 2>&1)
+                    EXIT_CODE=$?
                     echo "$RESULT"
-                    if echo "$RESULT" | grep -q '"value":\\[.*,"0"\\]'; then
+                    if [ $EXIT_CODE -ne 0 ]; then
+                        echo "ATTENTION: impossible de contacter Prometheus"
+                    elif echo "$RESULT" | grep -q '"value":\\[[^]]*,"0"\\]'; then
                         echo "ATTENTION: au moins un service est DOWN selon Prometheus"
                     else
                         echo "Tous les services surveilles sont UP"
