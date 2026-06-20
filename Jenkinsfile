@@ -92,6 +92,20 @@ pipeline {
                 sh 'kubectl get services -n $K8S_NAMESPACE'
             }
         }
+        stage('Monitoring Health Check') {
+            steps {
+                sh '''
+                    echo "Verification du monitoring post-deploiement..."
+                    RESULT=$(curl -s "http://172.17.0.1:9090/api/v1/query?query=probe_success" || echo "FAIL")
+                    echo "$RESULT"
+                    if echo "$RESULT" | grep -q '"value":\\[.*,"0"\\]'; then
+                        echo "ATTENTION: au moins un service est DOWN selon Prometheus"
+                    else
+                        echo "Tous les services surveilles sont UP"
+                    fi
+                '''
+            }
+        }
     }
     post {
         success {
