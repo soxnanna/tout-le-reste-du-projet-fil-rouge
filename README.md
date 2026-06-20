@@ -53,3 +53,4 @@ retry pipeline after dns fix
 retry pipeline - minikube fixed + restart policies applied
 retry - jenkins kubeconfig fixed
 retry - minikube DNS fixed, node Ready
+retry - docker0 bridge fixed
