@@ -1,0 +1,235 @@
+{
+  "title": "DevOps Services",
+  "uid": "devops-services",
+  "tags": ["devops", "services"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Jenkins",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 8, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "expr": "probe_success{instance=\"http://172.17.0.1:8080\"}", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "1": { "text": "UP", "color": "green" } } },
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" } } }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": { "colorMode": "background", "graphMode": "none" }
+    },
+    {
+      "id": 2,
+      "title": "SonarQube",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 8, "x": 8, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "expr": "probe_success{instance=\"http://172.17.0.3:9000\"}", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "1": { "text": "UP", "color": "green" } } },
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" } } }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": { "colorMode": "background", "graphMode": "none" }
+    },
+    {
+      "id": 3,
+      "title": "Portfolio",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 8, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "expr": "probe_success{instance=\"http://portfolio-web:80\"}", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "1": { "text": "UP", "color": "green" } } },
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" } } }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": { "colorMode": "background", "graphMode": "none" }
+    },
+    {
+      "id": 4,
+      "title": "Temps de reponse (actuel)",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 5 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "probe_duration_seconds{instance=\"http://172.17.0.1:8080\"}",
+          "legendFormat": "Jenkins",
+          "refId": "A"
+        },
+        {
+          "expr": "probe_duration_seconds{instance=\"http://172.17.0.3:9000\"}",
+          "legendFormat": "SonarQube",
+          "refId": "B"
+        },
+        {
+          "expr": "probe_duration_seconds{instance=\"http://portfolio-web:80\"}",
+          "legendFormat": "Portfolio",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1 },
+              { "color": "red", "value": 3 }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "title": "Uptime (1h)",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 5 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "avg_over_time(probe_success{instance=\"http://172.17.0.1:8080\"}[1h]) * 100",
+          "legendFormat": "Jenkins",
+          "refId": "A"
+        },
+        {
+          "expr": "avg_over_time(probe_success{instance=\"http://172.17.0.3:9000\"}[1h]) * 100",
+          "legendFormat": "SonarQube",
+          "refId": "B"
+        },
+        {
+          "expr": "avg_over_time(probe_success{instance=\"http://portfolio-web:80\"}[1h]) * 100",
+          "legendFormat": "Portfolio",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 95 },
+              { "color": "green", "value": 99 }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "title": "Historique des temps de reponse",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 11 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "probe_duration_seconds{instance=\"http://172.17.0.1:8080\"}",
+          "legendFormat": "Jenkins",
+          "refId": "A"
+        },
+        {
+          "expr": "probe_duration_seconds{instance=\"http://172.17.0.3:9000\"}",
+          "legendFormat": "SonarQube",
+          "refId": "B"
+        },
+        {
+          "expr": "probe_duration_seconds{instance=\"http://portfolio-web:80\"}",
+          "legendFormat": "Portfolio",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] }
+    },
+    {
+      "id": 7,
+      "title": "HTTP Phases - Jenkins",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 19 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "expr": "probe_http_duration_seconds{instance=\"http://172.17.0.1:8080\",phase=\"resolve\"}", "legendFormat": "DNS", "refId": "A" },
+        { "expr": "probe_http_duration_seconds{instance=\"http://172.17.0.1:8080\",phase=\"connect\"}", "legendFormat": "TCP connect", "refId": "B" },
+        { "expr": "probe_http_duration_seconds{instance=\"http://172.17.0.1:8080\",phase=\"transfer\"}", "legendFormat": "Transfert", "refId": "C" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s", "custom": { "stacking": { "mode": "normal" } } }, "overrides": [] }
+    },
+    {
+      "id": 8,
+      "title": "HTTP Phases - SonarQube",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 19 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "expr": "probe_http_duration_seconds{instance=\"http://172.17.0.3:9000\",phase=\"resolve\"}", "legendFormat": "DNS", "refId": "A" },
+        { "expr": "probe_http_duration_seconds{instance=\"http://172.17.0.3:9000\",phase=\"connect\"}", "legendFormat": "TCP connect", "refId": "B" },
+        { "expr": "probe_http_duration_seconds{instance=\"http://172.17.0.3:9000\",phase=\"transfer\"}", "legendFormat": "Transfert", "refId": "C" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s", "custom": { "stacking": { "mode": "normal" } } }, "overrides": [] }
+    },
+    {
+      "id": 9,
+      "title": "HTTP Phases - Portfolio",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 19 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "expr": "probe_http_duration_seconds{instance=\"http://portfolio-web:80\",phase=\"resolve\"}", "legendFormat": "DNS", "refId": "A" },
+        { "expr": "probe_http_duration_seconds{instance=\"http://portfolio-web:80\",phase=\"connect\"}", "legendFormat": "TCP connect", "refId": "B" },
+        { "expr": "probe_http_duration_seconds{instance=\"http://portfolio-web:80\",phase=\"transfer\"}", "legendFormat": "Transfert", "refId": "C" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s", "custom": { "stacking": { "mode": "normal" } } }, "overrides": [] }
+    }
+  ]
+}

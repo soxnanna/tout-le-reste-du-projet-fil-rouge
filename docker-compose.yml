@@ -47,7 +47,9 @@ services:
       mongodb:
         condition: service_healthy   # attend que MongoDB réponde
     networks:
-      - portfolio-net
+      portfolio-net:
+        aliases:
+          - backend-service
 
   # ═══════════════════════════════════════════════════════════
   # SERVICE 3 — FRONTEND
@@ -62,7 +64,7 @@ services:
     container_name: portfolio-web
     restart: unless-stopped
     ports:
-      - "80:80"     # http://localhost → Nginx → React + proxy /projets
+      - "8081:80"     # http://localhost → Nginx → React + proxy /projets
     depends_on:
       - backend
     networks:
